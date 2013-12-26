@@ -1,6 +1,6 @@
-describe "lambda" do
+describe "lambdas" do
 
-  it "returns a Proc" do
+  it "are a special type of Proc" do
     # given
     inc = lambda { |x| x + 1 }
 
