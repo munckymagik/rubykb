@@ -2,3 +2,5 @@
 --color
 --format doc
 --warnings
+-I .
+--require spec_helper
