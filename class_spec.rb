@@ -34,6 +34,14 @@ module Factory
       end
     end
   end
+
+  def self.create_obj_with_instance_var
+    Class.new do
+      def initialize
+        @an_instance_variable = "a value"
+      end
+    end.new
+  end
 end
 
 describe "Classes and Objects" do
@@ -127,11 +135,49 @@ describe "Classes and Objects" do
     end
   end
 
-  example "There are two types of class/static variables"
-  example "Class / static methods"
-  example "public visibility"
-  example "private visibility"
-  example "protected visibility"
+  describe "Instance Variables" do
+    let(:obj) { Factory.create_obj_with_instance_var }
+
+    they "are set simply by assigning to them" do
+      expect(obj.instance_variables).to eq([:@an_instance_variable])
+    end
+
+    they "cannot be accessed by code defined outside the class" do
+      expect {
+        obj.an_instance_variable
+      }.to raise_error NoMethodError
+
+      expect {
+        eval "obj.@an_instance_variable"
+      }.to raise_error SyntaxError
+    end
+
+    they "can be accessed using a deliberate backdoor, if you really need to" do
+      value = obj.instance_variable_get("@an_instance_variable")
+      expect(value).to eq("a value")
+    end
+  end
+
+  describe "Accessor Methods" do
+    they "can be generated automatically using attr_accessor"
+    specify "read only accessors are created using attr_reader"
+    specify "read only accessors are created using attr_writer"
+  end
+
+  describe "Class Variables" do
+
+  end
+
+  describe "Class / static methods" do
+
+  end
+
+  describe "Visibility" do
+    example "public visibility"
+    example "private visibility"
+    example "protected visibility"
+  end
+
   example "Does it support multiple inheritance?"
   example "Method and variable overriding rules"
   example "Deal with overriding rules relating to mixins in the other file"
