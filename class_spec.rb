@@ -38,37 +38,37 @@ end
 
 describe "Classes and Objects" do
 
-  describe "Class Declaration" do
+  describe "Classes" do
 
-    example "Classes are stored as global constants on Object" do
+    they "are stored as global constants on Object" do
       expect(Object.constants).to include :Array
       expect(Object.constants).to include :Hash
       expect(Object.constants).to include :Fixnum
       expect(Object.constants).to include :BlankClass
     end
 
-    example "Classes are declared using the class keyword" do
+    they "are declared using the class keyword" do
       expect(Object.constants).not_to include :DefinedByClassKeyword
       # Note this defines a global scope class that will not be GC'd
       class DefinedByClassKeyword; end
       expect(Object.constants).to include :DefinedByClassKeyword
     end
 
-    example "Classes are instances of the class object" do
+    they "are instances of the class object" do
       expect(BlankClass).to be_an_instance_of Class
     end
 
-    example "Classes have names" do
+    they "have names" do
       expect(BlankClass.name).to eq("BlankClass")
     end
 
-    example "Classes can be nested within modules" do
+    they "can be nested within modules" do
       expect(ModuleA::ClassA.name).to eq("ModuleA::ClassA")
       expect(Object.constants).not_to include :ClassA
       expect(ModuleA.constants).to include :ClassA
     end
 
-    example "Classes can be nested within classes" do
+    they "can be nested within classes" do
       expect(OuterClass::InnerClass.name).to eq("OuterClass::InnerClass")
       expect(Object.constants).not_to include :InnerClass
       expect(OuterClass.constants).to include :InnerClass
