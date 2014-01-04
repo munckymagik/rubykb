@@ -36,8 +36,11 @@ describe "lambdas" do
     expect {
       # when
       # this tries to call 'inc' on the enclosing scope
-      y = inc(99)
+      inc(99)
     }.to raise_error(NoMethodError)
+
+    # Purely to get rid of unused variable warning
+    expect(inc).to be(inc)
   end
 
   it "can be invoked by calling as instance.(...)" do

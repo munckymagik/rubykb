@@ -39,7 +39,7 @@ describe Enumerable do
 end
 
 describe Enumerator do
-   class CustCollection
+  class CustCollection
     def custom_each(extra_arg)
       yield extra_arg, 1
       yield extra_arg, 2
