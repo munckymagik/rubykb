@@ -83,6 +83,25 @@ describe "Classes and Objects" do
     end
   end
 
+  describe "Class Declarations" do
+    # Borrowed from the Koans
+    LastExpressionInClassStatement = class Dog
+                                       21
+                                     end
+
+    they "return the value of the last expression evaluated inside" do
+      expect(LastExpressionInClassStatement).to be(21)
+    end
+
+    SelfInsideOfClassStatement = class Dog
+                                   self
+                                 end
+
+    specify "inside the declaration, self points to the class instance" do
+      expect(SelfInsideOfClassStatement).to be(Dog)
+    end
+  end
+
   describe Class do
     it "inherits from Module" do
       expect(Class.superclass).to be(Module)
@@ -90,6 +109,10 @@ describe "Classes and Objects" do
 
     it "is itself an instance of Class" do
       expect(Class).to be_an_instance_of Class
+    end
+
+    it "is itself an Object" do
+      expect(Class).to be_an Object
     end
 
     describe "::new" do
@@ -221,4 +244,5 @@ describe "Classes and Objects" do
   example "Does it support multiple inheritance?"
   example "Method and variable overriding rules"
   example "Deal with overriding rules relating to mixins in the other file"
+  example "Singleton Methods"
 end
