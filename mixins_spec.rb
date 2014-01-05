@@ -28,4 +28,6 @@ describe "Mixins" do
     expect(MyClass.included_modules.include? MyMixin).to be_true
     expect(MyClass.ancestors.include? MyMixin).to be_true
   end
+
+  example "Method and variable overriding rules"
 end

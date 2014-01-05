@@ -1,3 +1,7 @@
+# TODO refactor this
+# * Need a consistent way of creating fixtures
+# * Need to consider breaking into more than one file
+
 class BlankClass
 end
 
@@ -226,9 +230,11 @@ describe "Classes and Objects" do
     end
   end
 
+  # TODO this should be moved into the metaclasses_spec.rb file instead
   describe "Class Instance Variables" do
     # Another nicer example is at http://martinfowler.com/bliki/ClassInstanceVariable.html
     class ClassInstanceVarParent
+      # Note: if we didn't use 'self' does this mean it would be defined on ClassInstanceVarParent?
       class << self
         attr_accessor :count
       end
@@ -256,18 +262,13 @@ describe "Classes and Objects" do
     end
   end
 
-  describe "Class / static methods" do
-
-  end
-
   describe "Visibility" do
     example "public visibility"
     example "private visibility"
     example "protected visibility"
   end
 
-  example "Does it support multiple inheritance?"
-  example "Method and variable overriding rules"
-  example "Deal with overriding rules relating to mixins in the other file"
-  example "Singleton Methods"
+  describe "Inheritance" do
+    example "Method and variable overriding rules"
+  end
 end
