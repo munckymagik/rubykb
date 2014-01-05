@@ -165,6 +165,46 @@ describe "Classes and Objects" do
   end
 
   describe "Class Variables" do
+    class ClassVarExample
+      @@class_var = 0
+
+      def class_var
+        @@class_var
+      end
+
+      def class_var= value
+        @@class_var = value
+      end
+    end
+
+    class ClassVarExampleAAAA < ClassVarExample; end
+    class ClassVarExampleBBBB < ClassVarExample; end
+
+    they "are shared across all instances of a class" do
+      bob = ClassVarExample.new
+      bob.class_var = 20
+
+      john = ClassVarExample.new
+      john.class_var = 10
+
+      expect(john.class_var).to eq(bob.class_var)
+      expect(bob.class_var).to eq(10)
+    end
+
+    they "are shared across all sub-classes" do
+      bob = ClassVarExampleAAAA.new
+      bob.class_var = 20
+
+      john = ClassVarExampleBBBB.new
+      john.class_var = 10
+
+      expect(john.class_var).to eq(bob.class_var)
+      expect(bob.class_var).to eq(10)
+    end
+  end
+
+  describe "Class Instance Variables" do
+    # Example based on http://martinfowler.com/bliki/ClassInstanceVariable.html
 
   end
 
