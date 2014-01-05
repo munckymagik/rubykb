@@ -228,6 +228,15 @@ describe "Classes and Objects" do
       expect(john.class_var).to eq(bob.class_var)
       expect(bob.class_var).to eq(10)
     end
+
+    they "are visible in the declaring class and its descendants" do
+      expect(ClassVarExample.class_variables).to include(:@@class_var)
+      expect(ClassVarExampleAAAA.class_variables).to include(:@@class_var)
+    end
+
+    they "are not visible in the declaring class's ancestors" do
+      expect(ClassVarExample.superclass.class_variables).not_to include(:@@class_var)
+    end
   end
 
   # TODO this should be moved into the metaclasses_spec.rb file instead
