@@ -1,8 +1,10 @@
 # My Ruby Knowledge Base
 
-This repo contains a collection of Rspec examples that demonstrate
-how various parts of the Ruby language and ecosystem work.
+My personal notebook of examples demonstrating the features of the
+Ruby language, made in the form of Rspec specifications.
 
 It is really just a reference for me, it is not intended to be a
 thorough spec (for that see http://rubyspec.org/).
 
+As and when I experiment with any particular feature, this repo
+will provide me a place to capture what I learn.
