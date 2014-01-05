@@ -227,8 +227,33 @@ describe "Classes and Objects" do
   end
 
   describe "Class Instance Variables" do
-    # Example based on http://martinfowler.com/bliki/ClassInstanceVariable.html
+    # Another nicer example is at http://martinfowler.com/bliki/ClassInstanceVariable.html
+    class ClassInstanceVarParent
+      class << self
+        attr_accessor :count
+      end
 
+      def initialize
+        self.class.count ||= 0
+        self.class.count += 1
+      end
+    end
+
+    class ClassInstanceVarSubClassAAAA < ClassInstanceVarParent; end
+    class ClassInstanceVarSubClassBBBB < ClassInstanceVarParent; end
+
+    they "are defined on specific classes and not shared among all in a hierarchy" do
+      ClassInstanceVarSubClassAAAA.new
+      ClassInstanceVarSubClassBBBB.new
+
+      expect(ClassInstanceVarParent.count).to be(nil)
+      expect(ClassInstanceVarSubClassAAAA.count).to be(1)
+      expect(ClassInstanceVarSubClassBBBB.count).to be(1)
+
+      expect(ClassInstanceVarParent.instance_variables).to eq([])
+      expect(ClassInstanceVarSubClassAAAA.instance_variables).to eq([:@count])
+      expect(ClassInstanceVarSubClassBBBB.instance_variables).to eq([:@count])
+    end
   end
 
   describe "Class / static methods" do
