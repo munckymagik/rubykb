@@ -74,7 +74,7 @@ describe "Meta Classes" do
         expect(MethodDemo.a_class_method).to eq(:hello_from_class)
       end
 
-      # Define a method class by opening the class singleton directly
+      # Define a class method by opening the class singleton directly
       class << MethodDemo
         def another_class_method
           :yet_another
