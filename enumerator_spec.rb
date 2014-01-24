@@ -23,7 +23,7 @@ describe Enumerator do
     expect(cc_enum.to_a).to eq([0, 1, 2])
   end
 
-   it "can be created using Object#enum_for, which is an alias for #to_enum" do
+  it "can be created using Object#enum_for, which is an alias for #to_enum" do
     enum = "123".enum_for(:each_byte)
     expect(enum.to_a).to eq([49, 50, 51])
 
@@ -51,7 +51,6 @@ describe Enumerator do
     expect(a.each).to be_an_instance_of Enumerator
   end
 
-  it "can be used to chain execution of iteration" do
+  it "can be used to chain execution of iteration"
 
-  end
 end
