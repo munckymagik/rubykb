@@ -188,7 +188,7 @@ describe "Classes and Objects" do
   describe "Accessor Methods" do
     they "can be generated automatically using attr_accessor"
     specify "read only accessors are created using attr_reader"
-    specify "read only accessors are created using attr_writer"
+    specify "write only accessors are created using attr_writer"
   end
 
   describe "Class Variables" do
