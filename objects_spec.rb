@@ -1,4 +1,3 @@
-
 module Factory
 
   def self.create_class_with_init
@@ -77,9 +76,101 @@ describe "Objects" do
   end
 
   describe "Accessor Methods" do
-    they "can be generated automatically using attr_accessor"
-    specify "read only accessors are created using attr_reader"
-    specify "write only accessors are created using attr_writer"
+    describe "attr_accessor" do
+      let! (:accessor_class) do
+        Class.new do
+          attr_accessor :rw
+        end
+      end
+
+      it "generates a getter and setter" do
+        # given
+        obj = accessor_class.new
+
+        # when
+        obj.rw = 42
+
+        # then
+        expect(obj.rw).to eq(42)
+      end
+
+      it "does not create/initialize the implied instance variable, " \
+         "but does not trigger a warning when you access it" do
+        # given
+        obj = accessor_class.new
+
+        # then
+        expect(obj.rw).to eq(nil)
+      end
+    end
+
+    describe "attr_reader" do
+      let! (:reader_class) do
+        Class.new do
+          attr_reader :r
+          def set_r r
+            @r = r
+          end
+        end
+      end
+
+      it "generates a getter" do
+        # given
+        obj = reader_class.new
+        obj.set_r 42
+
+        # then
+        expect(obj.r).to eq(42)
+      end
+
+      it "does not create/initialize the implied instance variable, " \
+         "but does not trigger a warning when you access it" do
+        # given
+        obj = reader_class.new
+
+        # then
+        expect(obj.r).to eq(nil)
+      end
+    end
+
+    describe "attr_writer" do
+      let! (:writer_class) do
+        Class.new do
+          attr_writer :w
+          def get_w
+            @w
+          end
+        end
+      end
+
+      it "generates a setter" do
+        # given
+        obj = writer_class.new
+
+        # when
+        obj.w = 42
+
+        # then
+        expect(obj.get_w).to eq(42)
+      end
+
+      it "does not create/initialize the implied instance variable" do
+        # given
+        obj = writer_class.new
+
+        # then
+        expect(obj.instance_variable_defined?(:@w)).to be_false
+        # generates a warning
+        #expect(obj.get_w).to eq(nil)
+
+        # when
+        obj.w = 42
+
+        # then
+        expect(obj.instance_variable_defined?(:@w)).to be_true
+        expect(obj.get_w).to eq(42)
+      end
+    end
   end
 
   describe "Class Variables" do
