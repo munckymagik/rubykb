@@ -60,6 +60,10 @@ describe Proc do
         prc = proc { |x, y, *z| "#{x}, #{y}, #{z}" }
         expect(prc.call 1, 2, 3, 4).to eq("1, 2, [3, 4]")
       end
+    end
+
+    describe "Proc 'tricks'" do
+      # NOTE Lambdas don't do this stuff
 
       it "silently discards extra parameters if created using Proc::new or Kernel::new" do
         prc = proc { |x| x }
@@ -94,6 +98,80 @@ describe Proc do
       it "is not listed as a member of #methods" do
         prc = proc {}
         expect(prc.methods.include? :"()").to be_false
+      end
+    end
+
+    describe "#===" do
+      it "invokes the proc" do
+        # given
+        y = 0
+        prc = proc { y = 1 }
+
+        # when
+        prc === nil
+
+        # then
+        expect(y).to eq(1)
+      end
+
+      it "passes its argument to the proc" do
+        # given
+        y = 0
+        prc = proc { |x| y = x }
+
+        # when
+        prc === 1
+
+        # then
+        expect(y).to eq(1)
+      end
+
+      it "passes multiple arguments to the proc when invoked as a function" do
+        # given
+        y = 0
+        prc = proc { |x, x1| y = x + x1 }
+
+        # when
+        prc.===(1, 2)
+
+        # then
+        expect(y).to eq(3)
+      end
+
+      it "can only pass multiple args when invoked as an operator by using 'Proc Tricks'" do
+        # given
+        y = 0
+        prc = proc { |x, x1| y = x + x1 }
+
+        # when
+        prc === [1, 2] # Proc Trick: auto-expand array argument
+
+        # then
+        expect(y).to eq(3)
+      end
+
+      it "returns the value of the last expression in the proc" do
+        # given
+        prc = proc { 42 }
+
+        # then
+        expect(prc === 0).to eq(42)
+      end
+
+      it "is to allow a proc object to be the target of a when clause in a case statement" do
+        # given
+        is_42 = ->(x) { x == 42 }
+        is_24 = ->(x) { x == 24 }
+        check_it = ->(x) {
+          case x
+            when is_42 then "yay 42"
+            when is_24 then "yay 24"
+          end
+        }
+
+        # then
+        expect(check_it[42]).to eq("yay 42")
+        expect(check_it[24]).to eq("yay 24")
       end
     end
   end
@@ -137,18 +215,59 @@ describe Proc do
     end
   end
 
-  context "comparison" do
-    pending
-  end
-
   context "properties" do
-    describe "#===" do pending end
-    describe "#arity" do pending end
-    describe "#inspect" do pending end
-    describe "#binding" do pending end
-    describe "#hash" do pending end
-    describe "#lambda?" do pending end
-    describe "#parameters" do pending end
-    describe "#source_location" do pending end
+    describe "#arity" do
+      it "returns the number of arguments expected by the proc" do
+        prc = proc {}
+        expect(prc.arity).to eq(0)
+
+        prc = proc { |x, y| }
+        expect(prc.arity).to eq(2)
+
+        # NOTE: It is more complicated than this where optional or defaulted arguments or lambdas involved
+      end
+    end
+
+    describe "#binding" do
+      def fred(param)
+        proc {}
+      end
+
+      it "provides a way to access the variables in scope from within the proc" do
+        b = fred(99)
+        expect(eval("param", b.binding)).to eq(99)
+      end
+    end
+
+    describe "#lambda?" do
+      it "return true for any Proc object for which argument handling is rigid" do
+        expect((lambda {}).lambda?).to be_true
+      end
+
+      it "return false for any Proc object for which argument handling is NOT rigid" do
+        expect((proc {}).lambda?).to be_false
+      end
+    end
+
+    describe "#parameters" do
+      it "returns info on a proc's parameters" do
+        prc = lambda { |x, y=42, *other| }
+        expect(prc.parameters).to eq([
+          [:req, :x],
+          [:opt, :y],
+          [:rest, :other]
+          ])
+      end
+
+      it "marks proc params as optional" do
+        procproc = proc { |x, y| }
+        expect(procproc.parameters).to eq([[:opt, :x], [:opt, :y]])
+      end
+
+      it "marks lambda params as not optional" do
+        lambdaproc = lambda { |x, y| }
+        expect(lambdaproc.parameters).to eq([[:req, :x], [:req, :y]])
+      end
+    end
   end
 end
