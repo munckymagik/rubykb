@@ -42,7 +42,7 @@ describe "Objects" do
     example "self.new calls #initialize" do
       class_with_init = Factory.create_class_with_init
       o = class_with_init.new
-      expect(o.init_called?).to be_true
+      expect(o.init_called?).to be_truthy
     end
 
     example "self.new passes its argument to #initialize" do
@@ -159,7 +159,7 @@ describe "Objects" do
         obj = writer_class.new
 
         # then
-        expect(obj.instance_variable_defined?(:@w)).to be_false
+        expect(obj.instance_variable_defined?(:@w)).to be_falsey
         # generates a warning
         #expect(obj.get_w).to eq(nil)
 
@@ -167,7 +167,7 @@ describe "Objects" do
         obj.w = 42
 
         # then
-        expect(obj.instance_variable_defined?(:@w)).to be_true
+        expect(obj.instance_variable_defined?(:@w)).to be_truthy
         expect(obj.get_w).to eq(42)
       end
     end

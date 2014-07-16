@@ -97,7 +97,7 @@ describe Proc do
 
       it "is not listed as a member of #methods" do
         prc = proc {}
-        expect(prc.methods.include? :"()").to be_false
+        expect(prc.methods.include? :"()").to be_falsey
       end
     end
 
@@ -241,11 +241,11 @@ describe Proc do
 
     describe "#lambda?" do
       it "return true for any Proc object for which argument handling is rigid" do
-        expect((lambda {}).lambda?).to be_true
+        expect((lambda {}).lambda?).to be_truthy
       end
 
       it "return false for any Proc object for which argument handling is NOT rigid" do
-        expect((proc {}).lambda?).to be_false
+        expect((proc {}).lambda?).to be_falsey
       end
     end
 
