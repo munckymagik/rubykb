@@ -101,9 +101,4 @@ describe "Classes" do
       end
     end
   end
-
-  describe "Inheritance" do
-    # TODO use a separate spec
-    example "Method and variable overriding rules"
-  end
 end
