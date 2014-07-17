@@ -112,4 +112,31 @@ describe "Mixins" do
       }.to raise_error(NoMethodError)
     end
   end
+
+  module Foo
+    def self.included(including_class)
+      # Pegs on the extend operation here, when this module is included into a
+      # class
+      including_class.extend(ClassMethods)
+    end
+
+    module ClassMethods
+      def a_class_method
+        :hi_from_class_method
+      end
+    end
+
+    def an_instance_method
+      :hi_from_instance_method
+    end
+  end
+
+  class Bazz
+    include Foo
+  end
+
+  example "you can bring in both class methods and instance methods when you include" do
+    expect(Bazz.a_class_method).to eq(:hi_from_class_method)
+    expect(Bazz.new.an_instance_method).to eq(:hi_from_instance_method)
+  end
 end
