@@ -51,7 +51,7 @@ describe "Mixins" do
       end
 
       class C
-        include A
+        include B
       end
 
       specify "module A has a static method and an instance method" do
@@ -61,21 +61,23 @@ describe "Mixins" do
         }.to raise_error(NoMethodError)
       end
 
-      specify "module A is included in module B" do
-        expect(B.include? A).to be_truthy
-      end
+      context "including into other modules" do
+        specify "module A is included in module B" do
+          expect(B.include? A).to be_truthy
+        end
 
-      specify "but that doesn't add anything useful to B" do
-        expect {
-          B.static_method
-        }.to raise_error(NoMethodError)
-        expect {
-          B.inst_method
-        }.to raise_error(NoMethodError)
+        specify "but that doesn't add anything useful to B" do
+          expect {
+            B.static_method
+          }.to raise_error(NoMethodError)
+          expect {
+            B.inst_method
+          }.to raise_error(NoMethodError)
+        end
       end
     end
 
-    context "Classes" do
+    context "including into a classes" do
       specify "class C includes module A via module B" do
         expect(C.include? A).to be_truthy
       end
