@@ -102,6 +102,15 @@ describe "Mixins" do
       extend A
     end
 
+    specify "class D extends module A" do
+      expect(D.respond_to? :inst_method)
+      expect(D.inst_method).to eq(:bye)
+    end
+
+    specify "you can detect extended modules in the singleton_class's includes" do
+      expect(D.singleton_class.included_modules).to include(A)
+    end
+
     specify "extending a class with a module brings in the module's instance methods as class methods" do
       expect(D.inst_method).to eq(:bye)
     end
