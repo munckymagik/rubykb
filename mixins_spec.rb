@@ -93,8 +93,6 @@ describe "Mixins" do
     end
   end
 
-  example "what happens if you extend into another module?"
-
   describe "extend" do
     class D
       extend A
@@ -117,6 +115,14 @@ describe "Mixins" do
       expect {
         D.static_method
       }.to raise_error(NoMethodError)
+    end
+
+    module ComposedModule
+      extend A
+    end
+
+    example "extending into another module allows you to compose modules" do
+      expect(ComposedModule.inst_method).to eq(:bye)
     end
   end
 
