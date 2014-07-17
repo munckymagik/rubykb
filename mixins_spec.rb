@@ -94,5 +94,28 @@ describe "Mixins" do
     end
   end
 
-  describe "extend"
+  describe "extend" do
+    module D
+      def instance_method
+        :instance_method_was_here
+      end
+      def self.class_method
+        :class_method_was_herex
+      end
+    end
+
+    class E
+      extend D
+    end
+
+    specify "extending a class with a module brings in the module's instance methods as class methods" do
+      expect(E.instance_method).to eq(:instance_method_was_here)
+    end
+
+    specify "module class methods are not added to the extending class" do
+      expect {
+        E.class_method
+      }.to raise_error(NoMethodError)
+    end
+  end
 end
