@@ -29,8 +29,6 @@ describe "Mixins" do
     expect(MyClass.ancestors.include? MyMixin).to be_truthy
   end
 
-  example "Method and variable overriding rules"
-
   describe "include" do
 
     context "Modules" do
@@ -148,4 +146,74 @@ describe "Mixins" do
     expect(Bazz.a_class_method).to eq(:hi_from_class_method)
     expect(Bazz.new.an_instance_method).to eq(:hi_from_instance_method)
   end
+
+  context "Method and variable overriding rules" do
+    class Pet
+      def speak
+        "Woof"
+      end
+    end
+
+    module Cat
+      def speak
+        "Mieow"
+      end
+
+      def cry
+        "rawwwwwwwwmmmrrr"
+      end
+    end
+
+    class MyPet
+      include Cat
+
+      def speak
+        "moooo"
+      end
+    end
+
+    module Pig
+      def self.included(including_class)
+        including_class.class_eval do
+          define_method "speak" do
+            "oink"
+          end
+        end
+      end
+    end
+
+    class AnotherPet
+      include Pig
+
+      def speak
+        "meep"
+      end
+    end
+
+    context "local instance methods take precedence" do
+      specify "including Cat into pet" do
+        Pet.include(Cat)
+        expect(Pet.new.speak).to eq("Woof")
+      end
+
+      specify "including Cat into MyPet" do
+        expect(MyPet.new.speak).to eq("moooo")
+      end
+
+      specify "including Pet into AnotherPet" do
+        expect(AnotherPet.new.speak).to eq('meep')
+      end
+    end
+
+    context "forcing a modules methods to have precedence" do
+      specify "the last version of a method to be defined wins" do
+        # Equivalent to writing the include line at the bottom of the class
+        # definition
+        Pet.include(Pig)
+        expect(Pet.new.speak).to eq('oink')
+      end
+    end
+
+  end
+
 end
