@@ -46,14 +46,6 @@ describe "Mixins" do
         end
       end
 
-      module B
-        include A
-      end
-
-      class C
-        include B
-      end
-
       specify "module A has a static method and an instance method" do
         expect(A.static_method).to eq(:hi)
         expect {
@@ -62,6 +54,11 @@ describe "Mixins" do
       end
 
       context "including into other modules" do
+
+        module B
+          include A
+        end
+
         specify "module A is included in module B" do
           expect(B.include? A).to be_truthy
         end
@@ -78,7 +75,11 @@ describe "Mixins" do
     end
 
     context "including into a classes" do
-      specify "class C includes module A via module B" do
+      class C
+        include A
+      end
+
+      specify "class C includes module A" do
         expect(C.include? A).to be_truthy
       end
 
@@ -94,27 +95,20 @@ describe "Mixins" do
     end
   end
 
-  describe "extend" do
-    module D
-      def instance_method
-        :instance_method_was_here
-      end
-      def self.class_method
-        :class_method_was_herex
-      end
-    end
+  example "what happens if you extend into another module?"
 
-    class E
-      extend D
+  describe "extend" do
+    class D
+      extend A
     end
 
     specify "extending a class with a module brings in the module's instance methods as class methods" do
-      expect(E.instance_method).to eq(:instance_method_was_here)
+      expect(D.inst_method).to eq(:bye)
     end
 
     specify "module class methods are not added to the extending class" do
       expect {
-        E.class_method
+        D.static_method
       }.to raise_error(NoMethodError)
     end
   end
