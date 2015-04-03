@@ -35,6 +35,8 @@ describe "Mixins" do
       module A
         CONSTANT = 1
 
+        class NestedClass; end
+
         def self.static_method
           :hi
         end
@@ -61,13 +63,18 @@ describe "Mixins" do
           expect(B.include? A).to be_truthy
         end
 
-        specify "but that doesn't add anything useful to B" do
+        specify "none of A's methods are added to B" do
           expect {
             B.static_method
           }.to raise_error(NoMethodError)
           expect {
             B.inst_method
           }.to raise_error(NoMethodError)
+        end
+
+        specify "Constants and classes defined in A are accessible from B" do
+          expect(B::CONSTANT).to eq(1)
+          expect(B::NestedClass).to be(A::NestedClass)
         end
       end
     end
