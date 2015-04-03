@@ -124,12 +124,10 @@ describe "Mixins" do
       }.to raise_error(NoMethodError)
     end
 
-    module ComposedModule
-      extend A
-    end
-
-    example "extending into another module allows you to compose modules" do
-      expect(ComposedModule.inst_method).to eq(:bye)
+    specify "module constants are not added to the extending class" do
+      expect {
+        D::NestedClass
+      }.to raise_error(NameError)
     end
   end
 
