@@ -8,3 +8,10 @@ thorough spec (for that see http://rubyspec.org/).
 
 As and when I experiment with any particular feature, this repo
 will provide me a place to capture what I learn.
+
+## Testing Ruby type checking
+
+```shell
+$ bundle exec steep check
+test_fodder.rb:11:15: ArgumentTypeMismatch: receiver=singleton(::TestFodder), expected=::String, actual=::Integer (123)
+```

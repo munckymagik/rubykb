@@ -1,0 +1,6 @@
+# Classes
+class TestFodder
+  @some_arg: String
+  def initialize: (String) -> String
+  def get: -> String
+end
